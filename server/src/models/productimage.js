@@ -1,46 +1,40 @@
 'use strict';
 
-const { DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../config/dbConnect.js';
 
-module.exports = (sequelize) => {
-  const productImage = sequelize.define('productImage', {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
-    },
-    productId: {
-      type: DataTypes.UUID,
-      references: {
-        model: "product",
-        key: "id"
-      },
-      image: {
-        type: DataTypes.STRING
-      },
-      postition: {
-        type: DataTypes.INTEGER
-      },
-      createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: DataTypes.DATE
-      }
+const ProductImage = sequelize.define('ProductImage', {
+  id: {
+    allowNull: false,
+    primaryKey: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4
+  },
+  productId: {
+    type: DataTypes.UUID,
+    references: {
+      model: "Product",
+      key: "id"
     }
-  }, {
-    timestamps: true,
-    freezeTableName: true
-  });
+  },
+  image: {
+    type: DataTypes.STRING
+  },
+  position: {
+    type: DataTypes.INTEGER
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.DATE
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.DATE
+  }
+}, {
+  timestamps: true,
+  freezeTableName: true
+});
 
 
-  // Define associations here
-  productImage.associate = (models) => {
-    // Example: User.hasMany(models.Order);
-  };
-
-  return productImage;
-};
+export default ProductImage

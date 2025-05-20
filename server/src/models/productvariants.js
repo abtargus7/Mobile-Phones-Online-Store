@@ -1,50 +1,46 @@
 'use strict';
 
-const { DataTypes } = require('sequelize');
-
-module.exports = (sequelize) => {
-  const productVariant = sequelize.define('productVariant', {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
-    },
-    productId: {
-      type: DataTypes.UUID,
-      references: {
-        model: "product",
-        key: "id"
-      },
-    },
-    variantTitle: {
-      type: DataTypes.STRING
-    },
-    inventoryQuantity: {
-      type: DataTypes.INTEGER
-    },
-    price: {
-      type: DataTypes.STRING
-    },
-    comparePrice: {
-      type: DataTypes.STRING
-    },
-    cost: {
-      type: DataTypes.STRING
-    },
-    sku: {
-      type: DataTypes.STRING
-    }
-  }, {
-    timestamps: true,
-    freezeTableName: true
-  });
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../config/dbConnect.js';
 
 
-  // Define associations here
-  productVariant.associate = (models) => {
-    // Example: User.hasMany(models.Order);
-  };
+const ProductVariant = sequelize.define('ProductVariant', {
+  id: {
+    allowNull: false,
+    primaryKey: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4
+  },
+  productId: {
+    type: DataTypes.UUID,
+    references: {
+      model: "Product",
+      key: "id"
+    },
+  },
+  variantTitle: {
+    type: DataTypes.STRING
+  },
+  inventoryQuantity: {
+    type: DataTypes.INTEGER
+  },
+  price: {
+    type: DataTypes.STRING
+  },
+  comparePrice: {
+    type: DataTypes.STRING
+  },
+  cost: {
+    type: DataTypes.STRING
+  },
+  sku: {
+    type: DataTypes.STRING
+  }
+}, {
+  timestamps: true,
+  freezeTableName: true
+});
 
-  return productVariant;
-};
+
+export default ProductVariant
+

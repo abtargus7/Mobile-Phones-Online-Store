@@ -1,9 +1,10 @@
 'use strict';
 
-const { DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../config/dbConnect.js';
 
-module.exports = (sequelize) => {
-  const product = sequelize.define('product', {
+
+const Product = sequelize.define('Product', {
     id: {
       allowNull: false,
       primaryKey: true,
@@ -19,7 +20,7 @@ module.exports = (sequelize) => {
     vendor: {
       type: DataTypes.STRING
     },
-    isAvailabe: {
+    isAvailable: {
       type: DataTypes.BOOLEAN
     },
     tags: {
@@ -34,9 +35,9 @@ module.exports = (sequelize) => {
     createdBy: {
       type: DataTypes.UUID,
       references: {
-        model: "user",
+        model: "User",
         key: "id"
-      },
+      }
     }
   }, {
     timestamps: true,
@@ -45,15 +46,14 @@ module.exports = (sequelize) => {
 
 
   // Define associations here
-  product.associate = (models) => {
-    //assosiate product with product variant
-    models.product.hasMany(models.productVariant, {foreignKey: "productId"});
-    models.productVariant.belongsTo(models.product, {foreignKey: "productId"})
+  Product.associate = (models) => {
+    //associate product with product variant
+    models.Product.hasMany(models.ProductVariant, {foreignKey: "productId"});
+    models.ProductVariant.belongsTo(models.Product, {foreignKey: "productId"})
 
-    //assosiate product with product image
-    models.product.hasMany(models.productImage, {foreignKey: "productId"})
-    models.productImage.belongsTo(models.product, {foreignKey: "productId"})
+    //associate product with product image
+    models.Product.hasMany(models.ProductImage, {foreignKey: "productId"})
+    models.ProductImage.belongsTo(models.Product, {foreignKey: "productId"})
   };
 
-  return product;
-};
+export default Product
