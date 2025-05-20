@@ -51,8 +51,8 @@ user.prototype.generateAccessToken = function () {
 
   // Define associations here
   user.associate = (models) => {
-    user.hasMany(models.product, {foreignKey: "createdBy"});
-    models.product.belongsTo(user, {foreignKey: "createdBy"})
+    models.user.hasMany(models.product, {foreignKey: "createdBy"});
+    models.product.belongsTo(models.user, {foreignKey: "createdBy"})
   };
 
   return user;

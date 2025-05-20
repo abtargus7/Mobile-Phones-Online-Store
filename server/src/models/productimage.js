@@ -3,7 +3,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  const productVariant = sequelize.define('productVariant', {
+  const productImage = sequelize.define('productImage', {
     id: {
       allowNull: false,
       primaryKey: true,
@@ -16,24 +16,20 @@ module.exports = (sequelize) => {
         model: "product",
         key: "id"
       },
-    },
-    variantTitle: {
-      type: DataTypes.STRING
-    },
-    inventoryQuantity: {
-      type: DataTypes.INTEGER
-    },
-    price: {
-      type: DataTypes.STRING
-    },
-    comparePrice: {
-      type: DataTypes.STRING
-    },
-    cost: {
-      type: DataTypes.STRING
-    },
-    sku: {
-      type: DataTypes.STRING
+      image: {
+        type: DataTypes.STRING
+      },
+      postition: {
+        type: DataTypes.INTEGER
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE
+      }
     }
   }, {
     timestamps: true,
@@ -42,9 +38,9 @@ module.exports = (sequelize) => {
 
 
   // Define associations here
-  productVariant.associate = (models) => {
+  productImage.associate = (models) => {
     // Example: User.hasMany(models.Order);
   };
 
-  return productVariant;
+  return productImage;
 };

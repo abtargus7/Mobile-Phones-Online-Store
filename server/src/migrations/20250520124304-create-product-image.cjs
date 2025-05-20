@@ -2,33 +2,25 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('productVariants', {
+    await queryInterface.createTable('productImages', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaltValue: Sequelize.UUIDV4
+        defaultValue: Sequelize.UUIDV4
       },
-      product: {
+      productId: {
+        type: Sequelize.UUID,
+              references: {
+                model: "product",
+                key: "id"
+              },
+      },
+      image: {
         type: Sequelize.STRING
       },
-      variantTitle: {
-        type: Sequelize.STRING
-      },
-      inventoryQuantity: {
+      postition: {
         type: Sequelize.INTEGER
-      },
-      price: {
-        type: Sequelize.STRING
-      },
-      comparePrice: {
-        type: Sequelize.STRING
-      },
-      cost: {
-        type: Sequelize.STRING
-      },
-      sku: {
-        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -41,6 +33,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('productVariants');
+    await queryInterface.dropTable('productImages');
   }
 };

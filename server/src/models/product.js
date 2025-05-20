@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
-      defaltValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4
     },
     title: {
       type: DataTypes.STRING
@@ -46,8 +46,13 @@ module.exports = (sequelize) => {
 
   // Define associations here
   product.associate = (models) => {
-    product.hasMany(models.productVariant, {foreignKey: "product"});
-    models.productVariant.belongsTo(product, {foreignKey: "product"})
+    //assosiate product with product variant
+    models.product.hasMany(models.productVariant, {foreignKey: "productId"});
+    models.productVariant.belongsTo(models.product, {foreignKey: "productId"})
+
+    //assosiate product with product image
+    models.product.hasMany(models.productImage, {foreignKey: "productId"})
+    models.productImage.belongsTo(models.product, {foreignKey: "productId"})
   };
 
   return product;
