@@ -140,5 +140,51 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
 })
 
+const deleteProduct = asyncHandler( async( req, res) => {
+    const {id} = req.params
 
-export { createProduct, getProduct, updateProduct }
+    const transaction = await sequelize.transaction()
+
+    try {
+        const product = await Product.findByPk(id)
+        if(!product) throw new ApiError(404, "Product not found")
+
+        await ProductVariant.destroy({
+            where: {productId: id},
+            transaction
+        })
+
+        await ProductImage.destroy({
+            where: {productId: id},
+            transaction
+        })
+
+        await Product.destroy({where: {id}, transaction})
+        await transaction.commit()
+
+        return res.status(200).json(new ApiResponse(200, {}, "Product removed successfully"))
+    } catch (error) {
+        await transaction.rollback()
+        throw new ApiError(500, error.message)
+    }
+})
+
+const getProductsCreatedByUser = asyncHandler( async(req, res) => {
+    const userId = req.user.id
+
+    const products = await Product.findAll({
+        where: {createdBy: userId},
+        include: [
+            {model: ProductVariant},
+            {model: ProductImage}
+        ],
+        order: [["createdAt", "DESC"]]
+    })
+
+    if(!products.length) throw new ApiError(404, "No products found for this user")
+
+    return res.status(200).json(new ApiResponse(200, products, "Products retrieved successfully"))
+})
+
+
+export { createProduct, getProduct, updateProduct, deleteProduct, getProductsCreatedByUser }
