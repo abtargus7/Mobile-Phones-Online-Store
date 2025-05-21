@@ -1,5 +1,6 @@
 import 'dotenv/config'
 
+// environments for database connection
 export default {
   "development": {
     "username": process.env.DB_USER,

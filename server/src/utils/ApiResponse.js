@@ -1,3 +1,4 @@
+//customized response class to structure response
 class ApiResponse {
     constructor(statusCode, data, message = "Success") {
         this.statusCode = statusCode

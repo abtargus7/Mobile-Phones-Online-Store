@@ -3,6 +3,7 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../config/dbConnect.js';
 
+//productImage database model
 const ProductImage = sequelize.define('ProductImage', {
   id: {
     allowNull: false,
@@ -36,6 +37,5 @@ const ProductImage = sequelize.define('ProductImage', {
   timestamps: true,
   freezeTableName: true
 });
-
 
 export default ProductImage

@@ -5,8 +5,9 @@ const env = process.env.NODE_ENV || 'development'
 
 const sequelize = new Sequelize(config[env])
 
+//function to check database connection
 const dbConnect = async () => {
-  //check database connection
+  
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
@@ -15,6 +16,7 @@ const dbConnect = async () => {
   }
 }
 
+//function to sync database 
 const syncDatabase = async () => {
   try {
     await sequelize.sync()

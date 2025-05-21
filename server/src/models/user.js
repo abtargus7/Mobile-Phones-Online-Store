@@ -1,11 +1,12 @@
 'use strict';
 import 'dotenv/config'
-import {DataTypes} from 'sequelize'
-import {sequelize} from '../config/dbConnect.js'
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../config/dbConnect.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import Product from './product.js';
 
+//user database model
 const User = sequelize.define('User', {
   id: {
     allowNull: false,
@@ -32,12 +33,12 @@ const User = sequelize.define('User', {
   freezeTableName: true
 });
 
-// Hash password before saving 
+// Encrypt password before saving 
 User.beforeCreate(async (user) => {
   user.password = await bcrypt.hash(user.password, 10);
 });
 
-// method to check password
+// method to match password
 User.prototype.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
@@ -50,11 +51,9 @@ User.prototype.generateAccessToken = function () {
   );
 };
 
-
-
-  User.hasMany(Product, { foreignKey: "createdBy" });
-  Product.belongsTo(User, { foreignKey: "createdBy" })
-
+//associate user model with product model
+User.hasMany(Product, { foreignKey: "createdBy" });
+Product.belongsTo(User, { foreignKey: "createdBy" })
 
 export default User
 

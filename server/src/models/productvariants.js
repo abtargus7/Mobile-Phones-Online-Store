@@ -3,7 +3,7 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../config/dbConnect.js';
 
-
+//productVariant database model
 const ProductVariant = sequelize.define('ProductVariant', {
   id: {
     allowNull: false,
@@ -44,7 +44,6 @@ const ProductVariant = sequelize.define('ProductVariant', {
   timestamps: true,
   freezeTableName: true
 });
-
 
 export default ProductVariant
 
