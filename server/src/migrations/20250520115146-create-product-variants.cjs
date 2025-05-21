@@ -12,10 +12,10 @@ module.exports = {
       productId: {
         allowNull: false,
         type: Sequelize.UUID,
-              references: {
-                model: "Product",
-                key: "id"
-              },
+        references: {
+          model: "Product",
+          key: "id"
+        },
       },
       variantTitle: {
         type: Sequelize.STRING
@@ -44,6 +44,14 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+
+    //Add composite unique constraint for `productId + variantTitle`
+    await queryInterface.addConstraint("ProductVariant", {
+      fields: ["productId", "variantTitle"],
+      type: "unique",
+      name: "product_variant_unique"
+    });
+
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('ProductVariant');

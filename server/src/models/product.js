@@ -2,6 +2,8 @@
 
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../config/dbConnect.js';
+import ProductImage from './productimage.js';
+import ProductVariant from './productvariants.js';
 
 
 const Product = sequelize.define('Product', {
@@ -48,15 +50,16 @@ const Product = sequelize.define('Product', {
   });
 
 
-  // Define associations here
-  Product.associate = (models) => {
+// associations
+ 
     //associate product with product variant
-    models.Product.hasMany(models.ProductVariant, {foreignKey: "productId"});
-    models.ProductVariant.belongsTo(models.Product, {foreignKey: "productId"})
+    Product.hasMany(ProductVariant, {foreignKey: "productId"});
+    ProductVariant.belongsTo(Product, {foreignKey: "productId"})
 
     //associate product with product image
-    models.Product.hasMany(models.ProductImage, {foreignKey: "productId"})
-    models.ProductImage.belongsTo(models.Product, {foreignKey: "productId"})
-  };
+    Product.hasMany(ProductImage, {foreignKey: "productId"})
+    ProductImage.belongsTo(Product, {foreignKey: "productId"})
+
+
 
 export default Product

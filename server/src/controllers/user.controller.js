@@ -77,4 +77,21 @@ const getUser = asyncHandler( async( req, res) => {
     
 })
 
-export {createUser, getUser}
+const logOutUser = asyncHandler( async(req, res) => {
+    await User.update(
+        {accessToken: null},
+        {where: {id: req.user.id}}
+    )
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .json(new ApiResponse(200, {}, "User logged out"))
+})
+
+export {createUser, getUser, logOutUser}

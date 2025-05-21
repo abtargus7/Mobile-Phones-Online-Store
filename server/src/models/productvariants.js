@@ -36,8 +36,11 @@ const ProductVariant = sequelize.define('ProductVariant', {
   },
   sku: {
     type: DataTypes.STRING
-  }
+  },
 }, {
+  uniqueKeys: {
+    product_variant_unique: { fields: ["productId", "variantTitle"] },
+  },
   timestamps: true,
   freezeTableName: true
 });

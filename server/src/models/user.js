@@ -4,6 +4,7 @@ import {DataTypes} from 'sequelize'
 import {sequelize} from '../config/dbConnect.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import Product from './product.js';
 
 const User = sequelize.define('User', {
   id: {
@@ -50,11 +51,10 @@ User.prototype.generateAccessToken = function () {
 };
 
 
-// Define associations here
-User.associate = (models) => {
-  models.User.hasMany(models.Product, { foreignKey: "createdBy" });
-  models.Product.belongsTo(models.User, { foreignKey: "createdBy" })
-};
+
+  User.hasMany(Product, { foreignKey: "createdBy" });
+  Product.belongsTo(User, { foreignKey: "createdBy" })
+
 
 export default User
 
