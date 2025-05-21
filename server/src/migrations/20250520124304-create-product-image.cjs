@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ProductImages', {
+    await queryInterface.createTable('ProductImage', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -10,6 +10,7 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4
       },
       productId: {
+        allowNull: false,
         type: Sequelize.UUID,
               references: {
                 model: "Product",
@@ -19,7 +20,7 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       },
-      postition: {
+      position: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -33,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ProductImages');
+    await queryInterface.dropTable('ProductImage');
   }
 };

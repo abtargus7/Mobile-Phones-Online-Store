@@ -21,18 +21,21 @@ const Product = sequelize.define('Product', {
       type: DataTypes.STRING
     },
     isAvailable: {
-      type: DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
     },
     tags: {
       type: DataTypes.JSON
     },
     status: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue: "active"
     },
     category: {
       type: DataTypes.STRING
     },
     createdBy: {
+      allowNull: false,
       type: DataTypes.UUID,
       references: {
         model: "User",

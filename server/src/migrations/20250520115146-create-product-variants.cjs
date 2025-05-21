@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ProductVariants', {
+    await queryInterface.createTable('ProductVariant', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -10,6 +10,7 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4
       },
       productId: {
+        allowNull: false,
         type: Sequelize.UUID,
               references: {
                 model: "Product",
@@ -45,6 +46,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ProductVariants');
+    await queryInterface.dropTable('ProductVariant');
   }
 };

@@ -18,19 +18,22 @@ module.exports = {
       vendor: {
         type: Sequelize.STRING
       },
-      isAvailabe: {
-        type: Sequelize.BOOLEAN
+      isAvailable: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
       },
       tags: {
         type: Sequelize.JSON
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: "active"
       },
       category: {
         type: Sequelize.STRING
       },
       createdBy: {
+        allowNull: false,
         type: Sequelize.UUID,
         references: {
           model: "User",
