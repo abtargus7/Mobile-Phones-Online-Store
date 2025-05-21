@@ -186,5 +186,29 @@ const getProductsCreatedByUser = asyncHandler( async(req, res) => {
     return res.status(200).json(new ApiResponse(200, products, "Products retrieved successfully"))
 })
 
+const getAllProducts = asyncHandler( async(req ,res) => {
 
-export { createProduct, getProduct, updateProduct, deleteProduct, getProductsCreatedByUser }
+    const products = await Product.findAll({
+        include: [{model: ProductImage}],
+        order: [["createdAt", "DESC"]]
+    })
+
+    if(!products) throw new ApiError(404, "No products found")
+
+    return res.status(200).json(new ApiResponse(200, products, "All products retrieved Successfully"))
+})
+
+const getProducImages = asyncHandler( async(req, res) => {
+    const {id} = req.params
+
+    const images = ProductImage.findAll({
+        where: {productId : id},
+        order: [["position", "ASC"]]
+    })
+
+    if(!images.lenngth) throw new ApiError(404 , "No image found for the product")
+
+    return res.status(200).json(new ApiResponse(200, images, "Product images fetched Successfully"))
+})
+
+export { createProduct, getProduct, updateProduct, deleteProduct, getProductsCreatedByUser, getAllProducts, getProducImages }
