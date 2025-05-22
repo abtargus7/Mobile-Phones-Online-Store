@@ -36,7 +36,6 @@ const Login = () => {
       const response = await axios.post(`${API_BASE_URL}/user/login`, user, { withCredentials: true })
       if (!response) throw new Error("Login Failed")
       dispatch(login(response.data.data))
-      localStorage.setItem("accessToken", response.data.data.accessToken)
       toast("Login Successful")
 
       navigate("/")
