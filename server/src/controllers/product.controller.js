@@ -228,7 +228,10 @@ const getAllProducts = asyncHandler( async(req ,res) => {
 
     //fetch all products
     const products = await Product.findAll({
-        include: [{model: ProductImage}],
+        include: [
+            {model: ProductImage},
+            {model: ProductVariant}
+        ],
         order: [["createdAt", "DESC"]]
     })
 
