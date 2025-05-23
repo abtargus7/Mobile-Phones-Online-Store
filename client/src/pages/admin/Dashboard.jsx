@@ -17,10 +17,9 @@ import ProductList from "../../components/ProductList"
 
 const Dashboard = () => {
     return (
-        <SidebarProvider>
+        
             <AppSidebar />
-            <ProductList />
-        </SidebarProvider>
+       
     )
 }
 

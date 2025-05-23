@@ -1,5 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import userReducer from '../features/userSlice'
+import productReducer from '../features/productSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
 
@@ -8,10 +9,13 @@ const persistConfig = {
   storage
 }
 
-const persistedUserReducer = persistReducer(persistConfig, userReducer)
+const rootReducer = combineReducers({
+    user: persistReducer(persistConfig, userReducer),
+    product: productReducer
+})
 
 export const store = configureStore({
-  reducer: persistedUserReducer,
+  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

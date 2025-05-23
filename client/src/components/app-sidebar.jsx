@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Link } from "react-router-dom"
 
 // This is sample data.
 const data = {
@@ -23,6 +24,16 @@ const data = {
     {
       title: "Manage Products",
       url: "/admin/dashboard",
+      items: [
+        {
+          title: "Product List",
+          url: "/admin/products",
+        },
+        {
+          title: "Add new Product",
+          url: "/admin/product",
+        },
+      ],
     },
 
   ],
@@ -45,9 +56,12 @@ export function AppSidebar({
             {data.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
-                    {item.title}
-                  </a>
+                  {/* <a href={item.url} className="font-medium">
+                    
+                  </a> */}
+                  <Link to={item.url} className={'font-medium'}>
+                        {item.title}
+                  </Link>
                 </SidebarMenuButton>
                 {item.items?.length ? (
                   <SidebarMenuSub>

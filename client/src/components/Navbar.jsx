@@ -11,9 +11,11 @@ import { toast } from 'sonner'
 
 const Navbar = () => {
 
-    const user = useSelector((state) => state.user)
+    const {user} = useSelector((state) => state.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    console.log(user)
 
     const handleLogout = async () => {
         try {
@@ -50,10 +52,13 @@ const Navbar = () => {
                 ) : (
                     <>
                         <Button onClick={handleLogout}>Logout</Button>
-                        <NavLink to={"/admin/dashboard"}>
-                            <Button>Admin Panel</Button>
-                        </NavLink>
                     </>
+                )}
+
+                {user && user.role === "admin" && (
+                    <NavLink to={"/admin/dashboard"}>
+                        <Button>Admin Panel</Button>
+                    </NavLink>
                 )}
 
             </div>

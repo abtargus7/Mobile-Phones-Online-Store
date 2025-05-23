@@ -14,7 +14,7 @@ const Product = sequelize.define('Product', {
     defaultValue: DataTypes.UUIDV4
   },
   title: {
-    type: DataTypes.STRING
+    type: DataTypes.TEXT
   },
   description: {
     type: DataTypes.STRING

@@ -54,7 +54,7 @@ const createUser = asyncHandler( async(req, res) => {
     if(!existedUser[1]) throw new ApiError(409, "User already Exists")
 
     //send response
-    return res.status(201).json(new ApiResponse(201, existedUser, "User Registered Successfully"))
+    return res.status(201).json(new ApiResponse(201, existedUser, "User Registered Successfully. Please login"))
 
 })
 

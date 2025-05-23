@@ -21,7 +21,7 @@ const Product = () => {
             console.log(response.data.data)
             setProduct(response.data.data)
         } catch (error) {
-            toast(error?.message || "Something went wrong")
+           toast(error.response?.data?.message || error.message || "Something went Wrong")
         } finally {
             setLoading(false)
         }

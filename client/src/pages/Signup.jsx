@@ -41,11 +41,10 @@ const Signup = () => {
             if (!response) throw new Error("User registeration failed")
 
             console.log(response)
-            toast("User regisered successfully. Please Login")
+            toast(response.data.message)
             navigate("/login")
-            // dispatch(login(response))
         } catch (error) {
-            console.log(error)
+            toast(error.response?.data?.message || error.message || "Signup Failed")
         }
     }
 

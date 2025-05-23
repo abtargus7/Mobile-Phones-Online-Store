@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import axios from "axios";
 import API_BASE_URL from "../utils/api";
+import { toast } from "sonner";
 
 const ProductList = () => {
     const [products, setProducts] = useState([])
@@ -28,7 +29,7 @@ const ProductList = () => {
             setProducts(response.data.data)
             toast(response.data.message)
         } catch (error) {
-             toast(error.response?.data?.message || error.message || "Logout Failed")
+             toast(error.response?.data?.message || error.message || "Something went wrong")
         } finally {
             setLoading(false)
         }

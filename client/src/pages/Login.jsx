@@ -36,11 +36,11 @@ const Login = () => {
       const response = await axios.post(`${API_BASE_URL}/user/login`, user, { withCredentials: true })
       if (!response) throw new Error("Login Failed")
       dispatch(login(response.data.data))
-      toast("Login Successful")
+      toast(response.data.message)
 
       navigate("/")
     } catch (error) {
-      console.log(error)
+      toast(error.response?.data?.message || error.message || "Login Failed")
     }
   }
 

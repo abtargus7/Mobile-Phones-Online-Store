@@ -9,9 +9,11 @@ import Navbar from './components/Navbar'
 import Product from './pages/Product'
 import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/admin/Dashboard'
+import AdminLayout from './components/AdminLayout'
+import AddProduct from './pages/admin/AddProduct'
+import ProductList from './components/ProductList'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className='px-[9vw]'>
@@ -26,7 +28,12 @@ function App() {
 
           {/* admin routes - protected */}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+            <Route path="/admin" element={<AdminLayout />}>
                 <Route path='/admin/dashboard' element={<Dashboard />} />
+                <Route path='/admin/products' element={<ProductList />} />
+                <Route path='/admin/product' element={<AddProduct />} />
+                
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
