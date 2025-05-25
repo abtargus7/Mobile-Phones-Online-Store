@@ -21,8 +21,11 @@ A fast, scalable, and user-friendly e-commerce platform for browsing and managin
 
 /Mobile Phones Online Store 
 ├── frontend/ 
+
 ├── backend/
+
 └── README.md # You're here!
+
 
 📦 Installation
 
@@ -33,7 +36,9 @@ git clone https://github.com/abtargus7/Mobile-Phones-Online-Store.git
 cd Mobile-Phones-Online-Store
 ```
 
+
 🔧 1. Setup Backend
+
 
 ## Install dependencies
 ```bash
@@ -53,6 +58,7 @@ DB_PORT =your-db-port
 NODE_ENV =development
 ACCESS_TOKEN_SECRET=your-access-token-secret
 ```
+
 
 ## Start PostgreSQL
 
@@ -76,6 +82,7 @@ npx sequelize-cli db:create
 npx sequelize-cli db:migrate
 ```
 
+
 ## Run the backend:
 
 ```bash
@@ -83,24 +90,30 @@ npm run dev
 ```
 This starts the backend on ```http://localhost:5000```
 
+
 🎨 2. Setup Frontend
+
 
 ## Move to client directory
 ```bash
 cd client
 ```
 
+
 ## Install Dependencies
 ```bash
 npm install
 ```
+
 
 ## Start the frontend dev server:
 ```bash
 npm run dev
 ```
 
+
 🌐 API Endpoints
+
 
 ## User Endpoints
 
@@ -112,6 +125,7 @@ npm run dev
 
 - Log out:
 ```POST /api/v1/user/logout```
+
 
 ## Product Endpoints
 
