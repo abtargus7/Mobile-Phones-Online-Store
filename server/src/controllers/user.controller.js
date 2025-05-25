@@ -6,7 +6,6 @@ import {ApiResponse} from '../utils/ApiResponse.js'
 // method to generate access token 
 const generateAccessToken = async (userId) => {
     try {
-        console.log(userId)
 
         //find user by id
         const user = await User.findByPk(userId)

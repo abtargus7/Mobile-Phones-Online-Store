@@ -10,8 +10,6 @@ const ProtectedRoute = ({ allowedRoles }) => {
         return <div>Loading...</div>;
     }
 
-    console.log("user: ", user)
-
     // if user not admin navigate to login page
     if (!user || !allowedRoles.includes(user.role)) {
         toast("Please Login as an Admin");

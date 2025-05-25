@@ -21,7 +21,6 @@ const Product = () => {
             // api request
             const response = await axios.get(`${API_BASE_URL}/product/${id}`)
             if (response.status !== 200 || !response.data) throw new Error("Product not found")
-            console.log(response.data.data)
 
             // store data in a state
             setProduct(response.data.data)

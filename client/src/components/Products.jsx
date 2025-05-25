@@ -13,7 +13,6 @@ const Products = () => {
         try {
             const response = await axios.get(`${API_BASE_URL}/product`)
             if(response.status !== 200 || !response.data) throw new Error("No products found")
-            console.log(response.data.data)
             setProducts(response.data.data)
         } catch (error) {
             toast(error.response?.data?.message || error.message || "No products found")

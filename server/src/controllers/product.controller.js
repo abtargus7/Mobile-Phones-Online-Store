@@ -25,7 +25,6 @@ const createProduct = asyncHandler(async (req, res) => {
             createdBy: id
         }, { transaction })
 
-        console.log(createdProduct)
 
         //if product not inserted throw error
         if (!createProduct) throw new ApiError(400, "Failed to create Product")

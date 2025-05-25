@@ -65,7 +65,6 @@ const AddProduct = () => {
   // add new variant form row
   const addVariantRow = () => {
     setVariants(prev => ([...prev, { size: "", sku: "", quantity: "" }]));
-    console.log(variants)
   }
 
   // hook to track values of product form
@@ -101,7 +100,6 @@ const AddProduct = () => {
       //navigae to product list page if prouduct created
       navigate("/admin/products")
     } catch (error) {
-      console.log(error)
       toast(error.response?.data?.message || error.message || "Logout Failed")
     }
   }

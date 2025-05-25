@@ -54,7 +54,6 @@ const UpdateProduct = () => {
   // track updates in a variant
   const handleVariantChange = (index, field, value) => {
     dispatch(updateVariant({ index, field, value }))
-    console.log(variants)
   };
 
   // track updates in a product
@@ -111,7 +110,6 @@ const UpdateProduct = () => {
       // re render updated product
       getProudct()
     } catch (error) {
-      console.log(error)
       toast(error.response?.data?.message || error.message || "Something went wrong")
     }
   }

@@ -48,7 +48,6 @@ const UploadWidget = () => {
         };
 
         initializeUploadWidget();
-        console.log(images)
     }, [uwConfig, images])
 
     return (
