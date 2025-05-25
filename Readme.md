@@ -106,6 +106,13 @@ cd client
 npm install
 ```
 
+Create ```.env``` file in  ```/client```:
+```bash
+VITE_API_BASE_URL=http://localhost:4000/api/v1
+VITE_CLOUD_NAME=dmcvbdchp
+VITE_CLOUDINARY_UPLOAD_PRESET=vms_preset
+```
+
 
 ## Start the frontend dev server:
 ```bash
