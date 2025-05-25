@@ -26,7 +26,7 @@ import axios from 'axios'
 import API_BASE_URL from "../../utils/api";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
-import { addImages, addProduct, addVariant, addVariants, updateProduct, updateVariant } from "../../features/productSlice";
+import { addImages, addProduct, addVariant, addVariants, resetImages, updateProduct, updateVariant } from "../../features/productSlice";
 
 // schema to validate form inputs
 // const productSchema = z.object({
@@ -111,6 +111,8 @@ const UpdateProduct = () => {
       getProudct()
     } catch (error) {
       toast(error.response?.data?.message || error.message || "Something went wrong")
+    } finally {
+      dispatch(resetImages())
     }
   }
 

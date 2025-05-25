@@ -62,6 +62,9 @@ const productSlice = createSlice({
         removeImage: (state, action) => {
             state.images = state.images.filter((image) => image !== action.payload)
         },
+        resetImages: (state, action) => {
+            state.images = []
+        },
 
         // reset entire state
         resetUpdatedData: (state) => {
@@ -84,6 +87,7 @@ export const {
     resetUpdatedData,
     addVariants,
     addImages,
+    resetImages
 } = productSlice.actions;
 
 export default productSlice.reducer;
