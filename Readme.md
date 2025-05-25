@@ -20,6 +20,7 @@ A fast, scalable, and user-friendly e-commerce platform for browsing and managin
 ## 📁 Project Structure
 
 /Mobile Phones Online Store 
+
 ├── frontend/ 
 
 ├── backend/
