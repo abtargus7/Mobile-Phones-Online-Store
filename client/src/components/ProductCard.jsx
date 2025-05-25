@@ -31,8 +31,8 @@ const ProductCard = ({ id, image, title, price, comparePrice }) => {
 
                     {/* product pricing */}
                     <div className='flex gap-5'>
-                        <p className='text-sm font-medium'>{price}</p>
-                        <p className='text-sm font-medium line-through'>{comparePrice}</p>
+                        <p className='text-sm font-medium'>₹{price}</p>
+                        <p className='text-sm font-medium line-through text-gray-700'>₹{comparePrice}</p>
                     </div>
                 </CardContent>
             </Card>

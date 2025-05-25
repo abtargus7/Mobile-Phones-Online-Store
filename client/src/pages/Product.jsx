@@ -57,7 +57,7 @@ const Product = () => {
                     {/* pricing */}
                     <div className='flex gap-5'>
                         <p className='mt-5 text-3xl font-medium'>₹ {product.ProductVariants[0].price}</p>
-                        <p className='mt-5 text-3xl font-medium'>₹ {product.ProductVariants[0].comparePrice}</p>
+                        <p className='mt-5 text-3xl font-medium line-through text-gray-700'>₹ {product.ProductVariants[0].comparePrice}</p>
                     </div>
 
                     {/* variants */}

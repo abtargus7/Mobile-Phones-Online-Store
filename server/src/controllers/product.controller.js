@@ -144,7 +144,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
         await transaction.commit()
 
         //send response
-        return res.status(200).json(new ApiResponse(200, {}, "Product removed successfully"))
+        return res.status(201).json(new ApiResponse(201, {}, "Product removed successfully"))
     } catch (error) {
         //rollback transaction if error found
         await transaction.rollback()

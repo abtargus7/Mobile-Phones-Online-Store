@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { SquarePen } from 'lucide-react';
+import { SquarePen, Trash } from 'lucide-react';
 import { Checkbox } from "@/components/ui/checkbox"
 import {
     Table,
@@ -13,12 +13,13 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import API_BASE_URL from "../../utils/api";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductList = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const user = useSelector((state) => state.user)
+    const navigate = useNavigate()
 
     const getProductsCreatedByAdmin = async () => {
         setLoading(true)
@@ -28,7 +29,6 @@ const ProductList = () => {
             if (response.status !== 200 || !response.data) throw new Error("No products found")
 
             setProducts(response.data.data)
-            toast(response.data.message)
         } catch (error) {
             toast(error.response?.data?.message || error.message || "Something went wrong")
         } finally {
@@ -36,9 +36,23 @@ const ProductList = () => {
         }
     }
 
+    const deleteProduct = async (id) => {
+        try {
+            const response = await axios.delete(`${API_BASE_URL}/product/${id}`, { withCredentials: true })
+
+            if (response.status !== 201 || !response.data) throw new Error("Failed to delete product")
+
+            toast(response.data.message)
+            getProductsCreatedByAdmin()
+        } catch (error) {
+            toast(error.response?.data?.message || error.message || "Something went wrong")
+        }
+    }
+
     useEffect(() => {
         getProductsCreatedByAdmin()
     }, [])
+
 
     if (loading) return <div className="text-center text-lg font-medium">Loading...</div>
     return (
@@ -57,6 +71,7 @@ const ProductList = () => {
                             <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</TableHead>
                             <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendor</TableHead>
                             <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit</TableHead>
+                            <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delete</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody className="bg-white divide-y divide-gray-200 text-gray-500">
@@ -67,7 +82,7 @@ const ProductList = () => {
                                 </TableCell>
                                 <TableCell className="px-6 py-4 whitespace-nowrap flex items-center">
                                     <img
-                                        src={product.ProductImages[0].image}
+                                        src={product?.ProductImages[0]?.image}
                                         alt="Product"
                                         className="w-10 h-10 rounded-full mr-3"
                                     />
@@ -92,9 +107,12 @@ const ProductList = () => {
                                 <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{product.vendor}</TableCell>
                                 <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <Link to={`/admin/product/${product.id}`}>
-                                        <SquarePen />
+                                        <SquarePen className="text-green-800" />
                                     </Link>
 
+                                </TableCell>
+                                <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <Trash onClick={() => deleteProduct(product.id)} className="text-red-800" />
                                 </TableCell>
                             </TableRow>
                         ))}

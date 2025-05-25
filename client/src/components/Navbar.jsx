@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import API_BASE_URL from '../utils/api'
@@ -43,6 +44,10 @@ const Navbar = () => {
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
             </Link>
+
+            <NavLink to={"/"}>
+                <Label>Home</Label>
+            </NavLink>
 
             <div className='flex gap-6 items-center'>
                 {!user ? (
