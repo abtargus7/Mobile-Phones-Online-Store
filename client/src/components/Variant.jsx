@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button } from './ui/button'
 
+//variant buttons on a product page
 const Variant = ({title, id}) => {
 
-  console.log(title)
   return (
     <div className='flex gap-5'>
        

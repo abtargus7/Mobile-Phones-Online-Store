@@ -5,20 +5,25 @@ import axios from 'axios'
 import API_BASE_URL from '../utils/api'
 import { toast } from 'sonner'
 
+// product page to show all product information
 const Product = () => {
-
+    // product id
     const { id } = useParams()
+
     const [product, setProduct] = useState({})
     const [loading, setLoading] = useState(true)
 
+    // fetch product from backend
     const getProduct = async () => {
-
         setLoading(true)
-
         try {
+
+            // api request
             const response = await axios.get(`${API_BASE_URL}/product/${id}`)
             if (response.status !== 200 || !response.data) throw new Error("Product not found")
             console.log(response.data.data)
+
+            // store data in a state
             setProduct(response.data.data)
         } catch (error) {
            toast(error.response?.data?.message || error.message || "Something went Wrong")
@@ -31,7 +36,7 @@ const Product = () => {
         getProduct()
     }, [])
 
-
+    // loading until product data loads in a state
     if (loading) return <div className="text-center text-lg font-medium">Loading...</div>
 
     return (
@@ -71,7 +76,8 @@ const Product = () => {
                     </div>
                 </div>
             </div>
-            {/* Product Description and review*/}
+
+            {/* Product Description */}
             <div className="mt-20">
                 <div className="flex">
                     <b className="border px-5 py-3 text-sm">Description</b>

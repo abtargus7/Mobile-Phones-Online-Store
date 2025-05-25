@@ -4,16 +4,21 @@ import productReducer from '../features/productSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
 
+
+//persistance storage config
 const persistConfig = {
   key: "user",
   storage
 }
 
+//combined reducer = userReducer + productReducer
 const rootReducer = combineReducers({
     user: persistReducer(persistConfig, userReducer),
     product: productReducer
 })
 
+
+//redux store configuration
 export const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",
@@ -27,6 +32,3 @@ export const store = configureStore({
 
 export const persistor = persistStore(store)
 
-persistor.subscribe(() => {
-  console.log("Persisted state:", store.getState());
-});

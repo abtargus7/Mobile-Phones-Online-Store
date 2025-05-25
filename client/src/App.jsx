@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -8,7 +5,6 @@ import Signup from './pages/Signup'
 import Navbar from './components/Navbar'
 import Product from './pages/Product'
 import ProtectedRoute from './components/ProtectedRoute'
-import Dashboard from './pages/admin/Dashboard'
 import AdminLayout from './components/AdminLayout'
 import AddProduct from './pages/admin/AddProduct'
 import ProductList from './pages/admin/ProductList'
@@ -21,6 +17,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
+
           {/* client routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -30,7 +27,6 @@ function App() {
           {/* admin routes - protected */}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
             <Route path="/admin" element={<AdminLayout />}>
-                {/* <Route path='/admin/dashboard' element={<Dashboard />} /> */}
                 <Route path='/admin/products' element={<ProductList />} />
                 <Route path='/admin/product' element={<AddProduct />} />
                 <Route path='/admin/product/:id' element={<UpdateProduct />} />

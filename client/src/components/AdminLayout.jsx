@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { AppSidebar } from "./app-sidebar";
 import { SidebarProvider } from '@/components/ui/sidebar'
+
+//sidebar admin layout
 const AdminLayout = () => {
     return (
         <div className="flex">

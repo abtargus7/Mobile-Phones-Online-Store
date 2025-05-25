@@ -16,6 +16,8 @@ import API_BASE_URL from "../utils/api"
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 
+
+// login page
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -25,19 +27,24 @@ const Login = () => {
     password: ""
   })
 
+  // track input changes
   const handleOnChange = (e) => {
     setUser(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
+  // fetch user from backend and store in persiting redux state
   const handleOnSubmit = async (e) => {
     e.preventDefault()
 
     try {
+
+      // api request
       const response = await axios.post(`${API_BASE_URL}/user/login`, user, { withCredentials: true })
       if (!response) throw new Error("Login Failed")
+
+      // store data in a redux store
       dispatch(login(response.data.data))
       toast(response.data.message)
-
       navigate("/")
     } catch (error) {
       toast(error.response?.data?.message || error.message || "Login Failed")
@@ -48,6 +55,8 @@ const Login = () => {
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className={"flex flex-col gap-6"}>
+
+          {/* login form */}
           <Card>
             <CardHeader>
               <CardTitle>Login to your account</CardTitle>
@@ -79,6 +88,8 @@ const Login = () => {
                     </Button>
                   </div>
                 </div>
+
+                {/* navigate to signup form */}
                 <div className="mt-4 text-center text-sm">
                   Don&apos;t have an account?{" "}
                   <a href="/signup" className="underline underline-offset-4">

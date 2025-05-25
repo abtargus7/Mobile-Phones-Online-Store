@@ -13,11 +13,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useState } from "react"
 import axios from 'axios'
 import API_BASE_URL from "../utils/api"
-import { useDispatch } from "react-redux"
 import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
 
+// sign up page
 const Signup = () => {
+
     const [user, setUser] = useState({
         email: "",
         password: "",
@@ -25,22 +26,23 @@ const Signup = () => {
         role: "user"
     })
 
-    const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    // track updated values
     const onHandleChange = (e) => {
         setUser(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
+    // submit form
     const handleOnSubmit = async (e) => {
         e.preventDefault()
 
         try {
+
+            // api request
             const response = await axios.post(`${API_BASE_URL}/user/signup`, user)
 
             if (!response) throw new Error("User registeration failed")
-
-            console.log(response)
             toast(response.data.message)
             navigate("/login")
         } catch (error) {
@@ -52,6 +54,7 @@ const Signup = () => {
         <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
             <div className="w-full max-w-sm">
                 <div className={"flex flex-col gap-6"}>
+                    {/* signup form */}
                     <Card>
                         <CardHeader>
                             <CardTitle>Create a new account</CardTitle>
@@ -62,22 +65,30 @@ const Signup = () => {
                         <CardContent>
                             <form onSubmit={handleOnSubmit}>
                                 <div className="flex flex-col gap-6">
+
+                                    {/* email */}
                                     <div className="grid gap-3">
                                         <Label htmlFor="email">Email</Label>
                                         <Input onChange={onHandleChange} name="email" id="email" type="email" placeholder="m@example.com" required />
                                     </div>
+
+                                    {/* password */}
                                     <div className="grid gap-3">
                                         <div className="flex items-center">
                                             <Label htmlFor="password">Password</Label>
                                         </div>
                                         <Input onChange={onHandleChange} name="password" id="password" type="password" required />
                                     </div>
+
+                                    {/* confirm password */}
                                     <div className="grid gap-3">
                                         <div className="flex items-center">
                                             <Label htmlFor="password">Confirm Password</Label>
                                         </div>
                                         <Input onChange={onHandleChange} name="confirmPassword" id="confirmPassword" type="password" required />
                                     </div>
+
+                                    {/* select admin or customer */}
                                     <RadioGroup value={user.role} onValueChange={(value) =>
                                         onHandleChange({ target: { name: "role", value } })
                                     }>
@@ -90,12 +101,16 @@ const Signup = () => {
                                             <Label htmlFor="option-two">Admin</Label>
                                         </div>
                                     </RadioGroup>
+
+                                    {/* submit button */}
                                     <div className="flex flex-col gap-3">
                                         <Button type="submit" className="w-full">
                                             Sign up
                                         </Button>
                                     </div>
                                 </div>
+
+                                {/* navigate to login page */}
                                 <div className="mt-4 text-center text-sm">
                                     Already have an account?{" "}
                                     <a href="/login" className="underline underline-offset-4">

@@ -5,8 +5,10 @@ import {
     CardContent,
 } from './ui/card'
 
+// component to show product in a card
 const ProductCard = ({ id, image, title, price, comparePrice }) => {
     return (
+        // navigate to detailed product page if click on the card
         <Link to={`/product/${id}`} className='text-gray-700 cursor-pointer'>
             <Card >
                 <CardContent>

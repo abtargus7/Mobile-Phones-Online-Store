@@ -4,16 +4,18 @@ import { addImage } from "../features/productSlice";
 import { Button } from '@/components/ui/button'
 import { uwConfig } from "../utils/cloudinary";
 
-
+//component to handle image uploads
 const UploadWidget = () => {
 
     const uploadWidgetRef = useRef(null);
     const uploadButtonRef = useRef(null);
-
+    
+    //fetch image state from redux store
     const { images } = useSelector((state) => state.product)
 
     const dispatch = useDispatch()
 
+    //call cloudinary upload widget to upload images
     useEffect(() => {
         const initializeUploadWidget = () => {
             if (window.cloudinary && uploadButtonRef.current) {
@@ -22,11 +24,7 @@ const UploadWidget = () => {
                     uwConfig,
                     (error, result) => {
                         if (!error && result && result.event === 'success') {
-                            //   setTemp((prev) => ({
-                            //     ...prev,
-                            //     images: [...prev.images, result.info.url], // Append new image URL
-                            //   }));
-
+                            //store image url in a state
                             dispatch(addImage(result.info.url))
                         }
                     }
@@ -53,8 +51,6 @@ const UploadWidget = () => {
         console.log(images)
     }, [uwConfig, images])
 
-
-
     return (
         <Button
             ref={uploadButtonRef}
@@ -63,7 +59,6 @@ const UploadWidget = () => {
             Upload
         </Button>
     );
-
 }
 
 export default UploadWidget

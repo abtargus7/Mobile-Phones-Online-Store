@@ -5,6 +5,8 @@ import { removeImage } from "../features/productSlice";
 
 const ItemType = "IMAGE";
 
+
+//image component for newly uploaded images
 const DroppableImage = ({ image, index, deleteImage }) => {
 
   return (
@@ -23,6 +25,7 @@ const DroppableImage = ({ image, index, deleteImage }) => {
   );
 };
 
+//image component for existing product images
 const DroppableRecievedImage = ({ image, index, deleteImage }) => {
 
   return (
@@ -41,11 +44,16 @@ const DroppableRecievedImage = ({ image, index, deleteImage }) => {
   );
 };
 
+//component to render uploaded images
 const ImageDisplayManager = () => {
 
+  //get newly uploaded and existing product images from redux store
   const {images, existingImages} = useSelector((state) => state.product)
+
+  //hook to make change changes in redux state
   const dispatch = useDispatch()
 
+  //function to remove image from store
   const deleteImage = (image) => {
       dispatch(removeImage(image))
   };
@@ -53,10 +61,13 @@ const ImageDisplayManager = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex flex-wrap transition-all duration-300 rounded border border-dashed border-gray-300 p-2">
+
+        {/* render existing proudct images */}
         {existingImages && existingImages.map((image, index) => (
           <DroppableRecievedImage key={index} index={index} image={image} deleteImage={deleteImage} />
         ))}
         
+        {/* render newly uploaded product images */}
         {images && images.map((image, index) => (
           <DroppableImage key={index} index={index} image={image} deleteImage={deleteImage} />
         ))}
