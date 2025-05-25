@@ -11,7 +11,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/admin/Dashboard'
 import AdminLayout from './components/AdminLayout'
 import AddProduct from './pages/admin/AddProduct'
-import ProductList from './components/ProductList'
+import ProductList from './pages/admin/ProductList'
+import UpdateProduct from './pages/admin/UpdateProduct'
 
 function App() {
 
@@ -29,10 +30,10 @@ function App() {
           {/* admin routes - protected */}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
             <Route path="/admin" element={<AdminLayout />}>
-                <Route path='/admin/dashboard' element={<Dashboard />} />
+                {/* <Route path='/admin/dashboard' element={<Dashboard />} /> */}
                 <Route path='/admin/products' element={<ProductList />} />
                 <Route path='/admin/product' element={<AddProduct />} />
-                
+                <Route path='/admin/product/:id' element={<UpdateProduct />} />
             </Route>
           </Route>
         </Routes>

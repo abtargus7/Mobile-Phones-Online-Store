@@ -29,7 +29,7 @@ const createProduct = asyncHandler(async (req, res) => {
 
         //if product not inserted throw error
         if (!createProduct) throw new ApiError(400, "Failed to create Product")
-        
+
         //insert product variants in the database
         if (variants && variants.length > 0) {
             const variantInstances = variants.map(variant => ({
@@ -94,76 +94,26 @@ const getProduct = asyncHandler(async (req, res) => {
 
 //update product 
 const updateProduct = asyncHandler(async (req, res) => {
-    const { product, variants, images } = req.body
+    const product = req.body;
 
-    //create transaction
-    const transaction = await sequelize.transaction()
-
-    try {
-        //if product has updates product will update
-        if (product) {
-            const [rowsUpdated, updatedProduct] = await Product.update(product, {
-                where: { id: req.params.id },
-                returning: true,
-                transaction
-            })
-            
-            //if nothing updated throw error
-            if (!rowsUpdated) throw new ApiError(400, "Failed to update product")
-
-        }
-
-        //update variants
-        if (variants && variants.length > 0) {
-            const variantInstances = variants.map(variant => ({
-                ...variant,
-                productId: req.params.id
-            }))
-
-            //update variant or insert new if variant not exist
-            if (variantInstances.length > 0) {
-                await ProductVariant.bulkCreate(variantInstances, {
-                    updateOnDuplicate: ["variantTitle", "inventoryQuantity", "price", "comparePrice", "cost", "sku"],
-                    transaction
-                })
-            }
-
-        }
-
-        //update images 
-        if (images && images.length > 0) {
-            const imageInstances = images.map((image, index) => ({
-                image: image.image,
-                position: image.position ?? index,
-                productId: req.params.id
-            }))
-
-            //update image or insert new if image not exist
-            if (imageInstances > 0) {
-                await ProductImage.bulkCreate(imageInstances, {
-                    updateOnDuplicate: ["image", "position"],
-                    transaction
-                })
-            }
-
-        }
-
-        //commit transaction
-        await transaction.commit()
-
-        //send response
-        return res.status(200).json(new ApiResponse(200, null, "Product Updated successfully"))
-
-    } catch (error) {
-        //rollback transaction if error found
-        await transaction.rollback()
-        throw new ApiError(500, error.message)
+    // Ensure full product replacement by checking for missing fields
+    if (!product || !product.title || !product.description || !product.status || !product.vendor) {
+        throw new ApiError(400, "All product fields must be provided for a PUT request");
     }
+
+    // Perform full product replacement
+    const [rowsUpdated, updatedProduct] = await Product.update(product, {
+        where: { id: req.params.id },
+        returning: true
+    });
+
+    return res.status(200).json(new ApiResponse(200, updatedProduct, "Product updated successfully"));
+
 })
 
 //delete product from the database
-const deleteProduct = asyncHandler( async( req, res) => {
-    const {id} = req.params
+const deleteProduct = asyncHandler(async (req, res) => {
+    const { id } = req.params
 
     //create transaction
     const transaction = await sequelize.transaction()
@@ -173,22 +123,22 @@ const deleteProduct = asyncHandler( async( req, res) => {
         const product = await Product.findByPk(id)
 
         //throw error if product not found
-        if(!product) throw new ApiError(404, "Product not found")
-        
+        if (!product) throw new ApiError(404, "Product not found")
+
         //delete product variants associated with product
         await ProductVariant.destroy({
-            where: {productId: id},
+            where: { productId: id },
             transaction
         })
 
         //delete product images associated with product
         await ProductImage.destroy({
-            where: {productId: id},
+            where: { productId: id },
             transaction
         })
 
         //delete product itself
-        await Product.destroy({where: {id}, transaction})
+        await Product.destroy({ where: { id }, transaction })
 
         //commit transaction
         await transaction.commit()
@@ -203,44 +153,123 @@ const deleteProduct = asyncHandler( async( req, res) => {
 })
 
 //get all products created by admin users from database
-const getProductsCreatedByUser = asyncHandler( async(req, res) => {
+const getProductsCreatedByUser = asyncHandler(async (req, res) => {
     const userId = req.user.id
 
     //fetch products from database
     const products = await Product.findAll({
-        where: {createdBy: userId},
+        where: { createdBy: userId },
         include: [
-            {model: ProductVariant},
-            {model: ProductImage}
+            { model: ProductVariant },
+            { model: ProductImage }
         ],
         order: [["createdAt", "DESC"]]
     })
 
     //if products not found throw error
-    if(!products.length) throw new ApiError(404, "No products found for this user")
+    if (!products.length) throw new ApiError(404, "No products found for this user")
 
     //send response
     return res.status(200).json(new ApiResponse(200, products, "Products retrieved successfully"))
 })
 
 //fetch all products from datatbase
-const getAllProducts = asyncHandler( async(req ,res) => {
+const getAllProducts = asyncHandler(async (req, res) => {
 
     //fetch all products
     const products = await Product.findAll({
         include: [
-            {model: ProductImage},
-            {model: ProductVariant}
+            { model: ProductImage },
+            { model: ProductVariant }
         ],
         order: [["createdAt", "DESC"]]
     })
 
     //throw error if products not found
-    if(!products) throw new ApiError(404, "No products found")
+    if (!products) throw new ApiError(404, "No products found")
 
     //send response
     return res.status(200).json(new ApiResponse(200, products, "All products retrieved Successfully"))
 })
 
+const updateVariants = asyncHandler(async (req, res) => {
+    const variants = req.body;
+    const productId = req.params.id
+
+
+    const transaction = await sequelize.transaction();
+
+    try {
+        const updatePromises = [];
+        const createPromises = [];
+
+        for (const variant of variants) {
+            if (variant.id) {
+                updatePromises.push(
+                    ProductVariant.update(variant, {
+                        where: { id: variant.id },
+                        transaction
+                    })
+                );
+            } else {
+                createPromises.push(ProductVariant.create({ ...variant, productId }, { transaction }));
+            }
+        }
+
+        await Promise.all(updatePromises);
+        const newVariants = await Promise.all(createPromises);
+
+        await transaction.commit();
+        return res.status(200).json(new ApiResponse(200, newVariants, "Updated product Variants"))
+    } catch (error) {
+        await transaction.rollback();
+        throw new ApiError(500, "Failed to update Variants")
+    }
+
+})
+
+const updateImages = asyncHandler(async (req, res) => {
+    const { images, newImages } = req.body;
+    const productId = req.params.id
+
+    const transaction = await sequelize.transaction()
+
+    try {
+        const updatePromises = []
+        const createPromises = []
+
+        for (const image of images) {
+            updatePromises.push(
+                ProductImage.update(images, {
+                    where: { id: image.id },
+                    transaction
+                })
+            )
+        }
+
+        const maxPosition = images.length
+
+        for (let i = 0; i < newImages.length; i++) {
+            createPromises.push(
+                ProductImage.create({
+                    image: newImages[i],
+                    position: maxPosition + i + 1,
+                    productId,
+                }, {transaction})
+            );
+        }
+
+        await Promise.all(updatePromises)
+        const createdImages = await Promise.all(createPromises)
+
+        await transaction.commit()
+        return res.status(200).json(new ApiResponse(200, createdImages, "Updated images"))
+
+    } catch (error) {
+        await transaction.rollback();
+        throw new ApiError(500, "Failed to update Imgaes")
+    }
+})
+
 //export all controllers
-export { createProduct, getProduct, updateProduct, deleteProduct, getProductsCreatedByUser, getAllProducts}
+export { createProduct, getProduct, updateProduct, deleteProduct, getProductsCreatedByUser, getAllProducts, updateVariants, updateImages }

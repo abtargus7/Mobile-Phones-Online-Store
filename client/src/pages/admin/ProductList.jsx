@@ -11,25 +11,26 @@ import {
 } from "@/components/ui/table"
 import { useSelector } from "react-redux";
 import axios from "axios";
-import API_BASE_URL from "../utils/api";
+import API_BASE_URL from "../../utils/api";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const ProductList = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const user = useSelector((state) => state.user)
 
-    const getProductsCreatedByAdmin = async() => {
+    const getProductsCreatedByAdmin = async () => {
         setLoading(true)
         try {
-            const response = await axios.get(`${API_BASE_URL}/product/user`, {withCredentials: true})
+            const response = await axios.get(`${API_BASE_URL}/product/user`, { withCredentials: true })
 
-            if(response.status !== 200 || !response.data) throw new Error("No products found")
+            if (response.status !== 200 || !response.data) throw new Error("No products found")
 
             setProducts(response.data.data)
             toast(response.data.message)
         } catch (error) {
-             toast(error.response?.data?.message || error.message || "Something went wrong")
+            toast(error.response?.data?.message || error.message || "Something went wrong")
         } finally {
             setLoading(false)
         }
@@ -38,7 +39,7 @@ const ProductList = () => {
     useEffect(() => {
         getProductsCreatedByAdmin()
     }, [])
-    
+
     if (loading) return <div className="text-center text-lg font-medium">Loading...</div>
     return (
 
@@ -47,7 +48,9 @@ const ProductList = () => {
                 <Table className="min-w-full divide-y divide-gray-200 text-xs">
                     <TableHeader>
                         <TableRow>
-                            <Checkbox />
+                            <TableHead className="py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <Checkbox />
+                            </TableHead>
                             <TableHead className="py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</TableHead>
                             <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</TableHead>
                             <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inventory</TableHead>
@@ -77,8 +80,8 @@ const ProductList = () => {
                                 <TableCell className="px-6 py-4 whitespace-nowrap">
                                     <span
                                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.status === "active"
-                                                ? "bg-green-100 text-green-800"
-                                                : "bg-red-100 text-red-800"
+                                            ? "bg-green-100 text-green-800"
+                                            : "bg-red-100 text-red-800"
                                             }`}
                                     >
                                         {product.status}
@@ -87,7 +90,12 @@ const ProductList = () => {
                                 <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{product.ProductVariants[0].inventoryQuantity}</TableCell>
                                 <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{product.category}</TableCell>
                                 <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{product.vendor}</TableCell>
-                                <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><SquarePen /></TableCell>
+                                <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <Link to={`/admin/product/${product.id}`}>
+                                        <SquarePen />
+                                    </Link>
+
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

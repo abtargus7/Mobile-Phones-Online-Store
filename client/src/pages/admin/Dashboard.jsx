@@ -13,7 +13,7 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from "@/components/ui/sidebar"
-import ProductList from "../../components/ProductList"
+import ProductList from "../admin/ProductList"
 
 const Dashboard = () => {
     return (

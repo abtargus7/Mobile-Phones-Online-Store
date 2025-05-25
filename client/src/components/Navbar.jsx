@@ -11,21 +11,26 @@ import { toast } from 'sonner'
 
 const Navbar = () => {
 
-    const {user} = useSelector((state) => state.user)
+    const { user } = useSelector((state) => state.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const {accessToken} = useSelector(state => state.user)
 
-    console.log(user)
+
+    console.log(accessToken)
 
     const handleLogout = async () => {
         try {
-            const response = await axios.post(`${API_BASE_URL}/user/logout`, {} ,{withCredentials: true})
-            if(response.status !== 200 ) throw new Error("Logout Failed")
+            const response = await axios.post(`${API_BASE_URL}/user/logout`, {}, {
+               withCredentials: true
+            })
+            if (response.status !== 200) throw new Error("Logout Failed")
 
             dispatch(logout())
             toast(response.data.message)
             navigate("/login")
         } catch (error) {
+            console.log(error)
             toast(error.response?.data?.message || error.message || "Logout Failed")
         }
     }
@@ -56,7 +61,7 @@ const Navbar = () => {
                 )}
 
                 {user && user.role === "admin" && (
-                    <NavLink to={"/admin/dashboard"}>
+                    <NavLink to={"/admin/products"}>
                         <Button>Admin Panel</Button>
                     </NavLink>
                 )}
