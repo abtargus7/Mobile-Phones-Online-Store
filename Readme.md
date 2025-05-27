@@ -161,6 +161,13 @@ npm run dev
 - Update product images:
   ```PUT /api/v1/product/:id/images```
 
+  🌐 API Documentation
+You can view the full API documentation via Swagger at:
+📌 URL
+```bash
+http://localhost:4000/api-docs
+```
+
   
 
 
