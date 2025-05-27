@@ -1,0 +1,872 @@
+openapi: 3.0.0
+info:
+  title: Online Mobile Store API documentation
+  version: 1.0.0
+  description: |
+    This API provides comprehensive endpoints to manage products in the Online Mobile Store.
+    It supports full CRUD operations on products, including:
+      - Creating, updating, and deleting products
+      - Managing product variants with different configurations (e.g., RAM, storage)
+      - Handling product images (uploading, updating, ordering)
+      - Filtering and querying products by category, tags, availability, and status
+    The API is designed to facilitate seamless integration with frontend applications,
+    enabling an efficient and flexible e-commerce experience for mobile device sales.
+servers:
+  - url: http://localhost:4000/
+components:
+        securitySchemes:
+          bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+paths:
+  /api/v1/user/signup:
+    post:
+      summary: User Signup
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - confirmPassword
+                - role
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: samsung1@gmail.com
+                password:
+                  type: string
+                  format: password
+                  example: samsung@123
+                confirmPassword:
+                  type: string
+                  format: password
+                  example: samsung@123
+                role:
+                  type: string
+                  example: admin
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 201
+                  data:
+                    type: array
+                    items:
+                      oneOf:
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                              example: b1700bdc-d3ae-49af-8907-0b6692393830
+                            password:
+                              type: string
+                              example: $2b$10$vr7jh38Me2D2wGQ...
+                            role:
+                              type: string
+                              example: admin
+                            email:
+                              type: string
+                              example: apple@gmail.com
+                            updatedAt:
+                              type: string
+                              format: date-time
+                            createdAt:
+                              type: string
+                              format: date-time
+                            accessToken:
+                              type: string
+                              nullable: true
+                              example: null
+                        - type: boolean
+                          example: true
+                  message:
+                    type: string
+                    example: User Registered Successfully. Please login
+                  success:
+                    type: boolean
+                    example: true
+  /api/v1/user/login:
+    post:
+      summary: User Login
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: abhipawara@gmail.com
+                password:
+                  type: string
+                  format: password
+                  example: abc@123
+      responses:
+        "200":
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: 519eaed1-df20-43e2-8c90-afe5ef5b2725
+                          email:
+                            type: string
+                            format: email
+                            example: abhipawara@gmail.com
+                          role:
+                            type: string
+                            example: admin
+                          accessToken:
+                            type: string
+                            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                          createdAt:
+                            type: string
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            format: date-time
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  message:
+                    type: string
+                    example: User Logged In successfully
+                  success:
+                    type: boolean
+                    example: true
+  /api/v1/user/logout:
+    post:
+      summary: User Logout
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: No request body needed
+        content: {}
+      responses:
+        '200':
+          description: User logged out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    example: {}
+                  message:
+                    type: string
+                    example: User logged out
+                  success:
+                    type: boolean
+                    example: true
+  /api/v1/product:
+    post:
+      summary: Create Product
+      tags:
+        - Product
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - product
+                - variants
+                - images
+              properties:
+                product:
+                  type: object
+                  required:
+                    - title
+                    - description
+                    - vendor
+                    - tags
+                    - category
+                  properties:
+                    title:
+                      type: string
+                      example: Redmin Note 12
+                    description:
+                      type: string
+                      example: Product 1 description
+                    vendor:
+                      type: string
+                      example: Xiomi
+                    tags:
+                      type: array
+                      items:
+                        type: string
+                      example: ["latest", "smartphone", "budget"]
+                    category:
+                      type: string
+                      example: smartphone
+                variants:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - variantTitle
+                      - inventoryQuantity
+                      - price
+                      - comparePrice
+                      - cost
+                      - sku
+                    properties:
+                      variantTitle:
+                        type: string
+                        example: 8GB 128GB
+                      inventoryQuantity:
+                        type: integer
+                        example: 10
+                      price:
+                        type: string
+                        example: "15999.00"
+                      comparePrice:
+                        type: string
+                        example: "17999.00"
+                      cost:
+                        type: string
+                        example: "14999.00"
+                      sku:
+                        type: string
+                        example: XIO-01-RD-02
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  example:
+                    - https://picsum.photos/id/0/367/267
+                    - https://picsum.photos/id/1/367/267
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 201
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 8e802f74-fa0d-4812-97e6-f2c170b5208e
+                      isAvailable:
+                        type: boolean
+                        example: true
+                      status:
+                        type: string
+                        example: active
+                      title:
+                        type: string
+                        example: Redmin Note 12
+                      description:
+                        type: string
+                        example: Product 1 description
+                      vendor:
+                        type: string
+                        example: Xiomi
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                        example: ["latest", "smartphone", "budget"]
+                      category:
+                        type: string
+                        example: smartphone
+                      createdBy:
+                        type: string
+                        example: 519eaed1-df20-43e2-8c90-afe5ef5b2725
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-05-27T11:19:40.699Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-05-27T11:19:40.699Z
+                  message:
+                    type: string
+                    example: Product Added Successfully
+                  success:
+                    type: boolean
+                    example: true
+    get:
+      summary: Get all products
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+  /api/v1/product/{productId}:
+    get:
+      summary: Get Product by ID
+      tags:
+        - Product
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: df88486a-625c-484d-a40f-783c3e7e4b23
+      responses:
+        '200':
+          description: Product details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      vendor:
+                        type: string
+                      isAvailable:
+                        type: boolean
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                      status:
+                        type: string
+                      category:
+                        type: string
+                      createdBy:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
+                      ProductVariants:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            productId:
+                              type: string
+                            variantTitle:
+                              type: string
+                            inventoryQuantity:
+                              type: integer
+                            price:
+                              type: string
+                            comparePrice:
+                              type: string
+                            cost:
+                              type: string
+                            sku:
+                              type: string
+                            createdAt:
+                              type: string
+                              format: date-time
+                            updatedAt:
+                              type: string
+                              format: date-time
+                      ProductImages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            productId:
+                              type: string
+                            image:
+                              type: string
+                              format: uri
+                            position:
+                              type: integer
+                            createdAt:
+                              type: string
+                              format: date-time
+                            updatedAt:
+                              type: string
+                              format: date-time
+                  message:
+                    type: string
+                    example: Product Retrieved successfully
+                  success:
+                    type: boolean
+                    example: true
+    put:
+      summary: Update a product by ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID of the product to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isAvailable:
+                  type: boolean
+                status:
+                  type: string
+                  enum: [active, inactive]
+                title:
+                  type: string
+                description:
+                  type: string
+                vendor:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+                category:
+                  type: string
+                createdBy:
+                  type: string
+                  format: uuid
+              required:
+                - title
+                - description
+                - vendor
+                - isAvailable
+                - status
+                - tags
+                - category
+                - createdBy
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  message:
+                    type: string
+                    example: Product updated successfully
+                  success:
+                    type: boolean
+                    example: true
+        '404':
+          description: Product not found
+        '500':
+          description: Server error
+    delete:
+      summary: Delete a product by ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID of the product to delete
+      requestBody:
+        description: No request body required
+        content: {}
+      responses:
+        '201':
+          description: Product removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 201
+                  data:
+                    type: object
+                    description: Empty object on successful deletion
+                  message:
+                    type: string
+                    example: Product removed successfully
+                  success:
+                    type: boolean
+                    example: true
+        '404':
+          description: Product not found
+        '500':
+          description: Server error
+  /api/v1/product/user:
+    get:
+      summary: Get products created by the authenticated user
+      tags:
+        - Product
+      responses:
+        '200':
+          description: A list of products created by the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        vendor:
+                          type: string
+                        isAvailable:
+                          type: boolean
+                        tags:
+                          type: array
+                          items:
+                            type: string
+                        status:
+                          type: string
+                          enum: [active, inactive]
+                        category:
+                          type: string
+                        createdBy:
+                          type: string
+                          format: uuid
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                        ProductVariants:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              productId:
+                                type: string
+                                format: uuid
+                              variantTitle:
+                                type: string
+                              inventoryQuantity:
+                                type: integer
+                              price:
+                                type: string
+                                format: decimal
+                              comparePrice:
+                                type: string
+                                format: decimal
+                              cost:
+                                type: string
+                                format: decimal
+                              sku:
+                                type: string
+                              createdAt:
+                                type: string
+                                format: date-time
+                              updatedAt:
+                                type: string
+                                format: date-time
+                        ProductImages:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              productId:
+                                type: string
+                                format: uuid
+                              image:
+                                type: string
+                                format: uri
+                              position:
+                                type: integer
+                              createdAt:
+                                type: string
+                                format: date-time
+                              updatedAt:
+                                type: string
+                                format: date-time
+  /api/v1/product/{productId}/variants:
+    put:
+      summary: Update variants of a product
+      tags:
+        - Products
+        - Variants
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the product to update variants for
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Variant ID (omit for new variants)
+                  productId:
+                    type: string
+                    format: uuid
+                    description: Associated product ID
+                  variantTitle:
+                    type: string
+                    example: "6GB 64GB"
+                  inventoryQuantity:
+                    type: integer
+                    example: 10
+                  price:
+                    type: string
+                    example: "15999.00"
+                  comparePrice:
+                    type: string
+                    example: "17999.00"
+                  cost:
+                    type: string
+                    example: "14999.00"
+                  sku:
+                    type: string
+                    example: "XIO-01-RD-05"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                required:
+                  - variantTitle
+                  - inventoryQuantity
+                  - price
+                  - sku
+      responses:
+        '200':
+          description: Updated product variants successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items: {}
+                    description: Empty array in response
+                  message:
+                    type: string
+                    example: Updated product Variants
+                  success:
+                    type: boolean
+                    example: true
+        '400':
+          description: Invalid input data
+        '404':
+          description: Product not found
+        '500':
+          description: Server error
+  /api/v1/product/{productId}/images:
+    put:
+      summary: Update images for a product
+      tags:
+        - Products
+        - Images
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the product to update images for
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  description: Existing images info to update
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: Image ID
+                      productId:
+                        type: string
+                        format: uuid
+                      image:
+                        type: string
+                        format: uri
+                        description: URL of the image
+                      position:
+                        type: integer
+                        description: Order position of the image
+                      createdAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                    required:
+                      - id
+                      - productId
+                      - image
+                      - position
+                newImages:
+                  type: array
+                  description: New image URLs to add
+                  items:
+                    type: string
+                    format: uri
+      responses:
+        '200':
+          description: Images updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        image:
+                          type: string
+                          format: uri
+                        position:
+                          type: integer
+                        productId:
+                          type: string
+                          format: uuid
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                  message:
+                    type: string
+                    example: Updated images
+                  success:
+                    type: boolean
+                    example: true
+        '400':
+          description: Invalid input
+        '404':
+          description: Product not found
+        '500':
+          description: Server error

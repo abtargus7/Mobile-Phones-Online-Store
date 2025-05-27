@@ -11,11 +11,12 @@ export default {
     "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": process.env.DB_USER || "postgres",
+    "password": process.env.DB_PASSWORD || "your_password",
+    "database": process.env.TEST_DB_DATABASE || "your_test_db",
+    "host": process.env.DB_HOST || "127.0.0.1",
+    "port": process.env.DB_PORT || 5432,
+    "dialect": "postgres"
   },
   "production": {
     "username": "root",
