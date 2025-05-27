@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import API_BASE_URL from '../utils/api'
 import ProductCard from './ProductCard'
+import { toast } from 'sonner'
 
 const Products = () => {
 

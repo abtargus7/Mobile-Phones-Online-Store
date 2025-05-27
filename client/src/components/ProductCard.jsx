@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import {
     Card,
@@ -18,7 +17,7 @@ const ProductCard = ({ id, image, title, price, comparePrice }) => {
                             className='hover:scale-110 transition ease-in-out h-72'
                             loading='lazy'
                             src={image}
-                            alt=""
+                            alt={title}
                         />
                     </div>
                     
