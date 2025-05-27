@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Navbar from '../src/components/Navbar'
-import { Provider, useSelector } from 'react-redux'
+import { Provider } from 'react-redux'
 import { vi } from 'vitest'
 import axios from 'axios'
 import { configureStore } from '@reduxjs/toolkit'

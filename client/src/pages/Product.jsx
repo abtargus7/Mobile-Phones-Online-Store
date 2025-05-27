@@ -12,6 +12,7 @@ const Product = () => {
 
     const [product, setProduct] = useState({})
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
 
     // fetch product from backend
     const getProduct = async () => {
@@ -26,6 +27,7 @@ const Product = () => {
             setProduct(response.data.data)
         } catch (error) {
            toast(error.response?.data?.message || error.message || "Something went Wrong")
+           setError(error.response?.data?.message || error.message || "Something went Wrong")
         } finally {
             setLoading(false)
         }
@@ -37,6 +39,7 @@ const Product = () => {
 
     // loading until product data loads in a state
     if (loading) return <div className="text-center text-lg font-medium">Loading...</div>
+    if (error) return <p>Error: {error}</p>
 
     return (
         <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
@@ -47,8 +50,8 @@ const Product = () => {
                     <div className='w-[80%]'>
                         <img
                             className='w-full h-auto rounded-2xl'
-                            src={product?.ProductImages[0].image}
-                            alt=''
+                            src={product?.ProductImages[0]?.image}
+                            alt={product.title}
                         />
                     </div>
                 </div>
@@ -69,7 +72,7 @@ const Product = () => {
                         <h1 className='text-xl font-semibold text-gray-700'>Select Variant</h1>
                         <div className='flex gap-2'>
                             {product.ProductVariants.map(variant => (
-                                <Variant title={variant.variantTitle} id={variant.id} />
+                                <Variant key={variant.id} title={variant.variantTitle} id={variant.id} />
                             ))}
                         </div>
                     </div>
