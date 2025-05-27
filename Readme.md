@@ -161,26 +161,35 @@ npm run dev
 - Update product images:
   ```PUT /api/v1/product/:id/images```
 
-  🌐 API Documentation
+🌐 API Documentation
 You can view the full API documentation via Swagger at:
+
 📌 URL
 ```bash
 http://localhost:4000/api-docs
 ```
 
-  
 
+🧪 Frontend Testing Guide
 
+🛠 Install Testing Dependencies
 
+To ensure the testing environment is properly set up, install the necessary dependencies by running:
+```bash
+npm install
+```
 
-
-
-
-
-
-
-
-
+📦 Required Development Dependencies
+Your project includes the following packages for testing:
+- Vitest (vitest) → Unit & integration testing framework
+- React Testing Library (@testing-library/react) → Component testing tools
+- Jest DOM (@testing-library/jest-dom) → DOM assertions
+- TypeScript Definitions (@types/jest, @types/react, @types/react-dom) → TypeScript compatibility for testing
+- JSDOM (jsdom) → Simulated browser environment for tests
+Once installed, you can start running tests with:
+```
+npm run test
+```
 
 
 
